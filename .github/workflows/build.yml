@@ -1,56 +1,31 @@
-name: Build Electron App
+name: Build/release
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+on: push
 
 jobs:
-  build:
-    name: Build on ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        node: [20]
+  release:
     runs-on: ${{ matrix.os }}
 
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Check out Git repository
+        uses: actions/checkout@v1
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node }}
+          node-version: 10
 
-      - name: Install dependencies
-        run: |
-          # Use npm install when package-lock.json is not present.
-          if [ -f package-lock.json ] || [ -f npm-shrinkwrap.json ]; then
-            npm ci
-          else
-            npm install
-          fi
-
-      - name: Build and package (platform-specific)
-        run: |
-          if [ "${{ matrix.os }}" = "ubuntu-latest" ]; then
-            npm run build-linux
-          elif [ "${{ matrix.os }}" = "windows-latest" ]; then
-            npm run build-win
-          elif [ "${{ matrix.os }}" = "macos-latest" ]; then
-            npm run build-mac
-          fi
-        shell: bash
-
-      - name: Upload artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
+      - name: Build/release Electron app
+        uses: samuelmeuli/action-electron-builder@v1
         with:
-          name: electron-build-${{ matrix.os }}
-          path: |
-            dist/**
-            release/**
+          # GitHub token, automatically provided to the action
+          # (No need to define this secret in the repo settings)
+          github_token: ${{ secrets.github_token }}
+
+          # If the commit is tagged with a version (e.g. "v1.0.0"),
+          # release the app after building
+          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
