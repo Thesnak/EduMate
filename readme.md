@@ -1,5 +1,9 @@
 # EduMate
 
+<p align="center">
+  <img src="build/logo.png" alt="EduMate Logo" width="200">
+</p>
+
 Your Study Mate — a lightweight local learning library and player built with Electron.
 
 ## What is EduMate?

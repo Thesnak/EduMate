@@ -13,7 +13,8 @@
     "coursera",
     "course",
     "player",
-    "education"
+    "education",
+    "Pdf viewer"
   ],
   "author": "Mohamed Mahmoud Ali",
   "license": "MIT",
@@ -22,33 +23,34 @@
     "electron-builder": "^24.6.4"
   },
   "build": {
-    "appId": "com.coursera.player",
-    "productName": "Coursera Player",
+    "appId": "com.edu.mate",
+    "productName": "EduMate - Your Study Mate Desktop App",
     "directories": {
       "output": "dist"
     },
     "files": [
       "main.js",
       "preload.js",
-      "index.html"
+      "index.html",
+      "build/**/*"
     ],
     "win": {
       "target": [
         "nsis"
       ],
-      "icon": "assets/icon.ico"
+      "icon": "build/logo.ico"
     },
     "mac": {
       "target": [
         "dmg"
       ],
-      "icon": "assets/icon.icns"
+      "icon": "build/logo.icns"
     },
     "linux": {
       "target": [
         "AppImage"
       ],
-      "icon": "assets/icon.png"
+      "icon": "build/logo.png"
     }
   }
 }
