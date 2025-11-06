@@ -1,0 +1,54 @@
+{
+  "name": "edumate",
+  "version": "1.0.0",
+  "description": "EduMate - Your Study Mate Desktop App",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron . --disable-gpu",
+    "build-win": "electron-builder --win",
+    "build-mac": "electron-builder --mac",
+    "build-linux": "electron-builder --linux"
+  },
+  "keywords": [
+    "coursera",
+    "course",
+    "player",
+    "education"
+  ],
+  "author": "Mohamed Mahmoud Ali",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^27.0.0",
+    "electron-builder": "^24.6.4"
+  },
+  "build": {
+    "appId": "com.coursera.player",
+    "productName": "Coursera Player",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "assets/icon.ico"
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "icon": "assets/icon.icns"
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "icon": "assets/icon.png"
+    }
+  }
+}
