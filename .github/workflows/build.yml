@@ -1,5 +1,5 @@
 # name of your github action
-name: CI
+name: Build Electron Appv2
 # this will help you specify where to run 
 on:
   push:
