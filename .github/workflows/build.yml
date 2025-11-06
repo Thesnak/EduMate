@@ -4,10 +4,18 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    name: Build on ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node: [20]
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout repository
@@ -16,13 +24,27 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ matrix.node }}
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Build Electron app
-        run: npm run build
+      - name: Build and package (platform-specific)
+        run: |
+          if [ "${{ matrix.os }}" = "ubuntu-latest" ]; then
+            npm run build-linux
+          elif [ "${{ matrix.os }}" = "windows-latest" ]; then
+            npm run build-win
+          elif [ "${{ matrix.os }}" = "macos-latest" ]; then
+            npm run build-mac
+          fi
+        shell: bash
 
-      - name: Package app
-        run: npx electron-builder --linux --win --mac
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: electron-build-${{ matrix.os }}
+          path: |
+            dist/**
+            release/**
